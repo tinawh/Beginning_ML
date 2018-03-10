@@ -20,6 +20,7 @@ forecast_col = 'Adj. Close'
 df.fillna(value=-99999, inplace=True) # replace NAs so they become outliers 
 
 forecast_out = int(math.ceil(0.01*len(df))) # predict 1% in the future
+print(forecast_out)
 df['label'] = df[forecast_col].shift(-forecast_out) # shift upwards 1% into future
 
 df.dropna(inplace=True)
@@ -34,7 +35,9 @@ X = preprocessing.scale(X)
 # shuffles up and outputs training data and testing data 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
-clf = LinearRegression() # linear regression classifier
+# easy to switch algorithms, check documentation for n_jobs to thread
+clf = LinearRegression(n_jobs=-1) # linear regression
+# clf = svm.SVR(kernel='poly') # SVR
 clf.fit(X_train, y_train) # fit is train
 accuracy = clf.score(X_test, y_test) # score is test 
 
