@@ -8,6 +8,7 @@ from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt 
 from matplotlib import style
+import pickle
 
 style.use('ggplot')
 
@@ -43,6 +44,12 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 clf = LinearRegression(n_jobs=-1) # linear regression
 # clf = svm.SVR(kernel='poly') # SVR
 clf.fit(X_train, y_train) # fit is train
+with open('linearregression.pickle', 'wb') as f:
+	pickle.dump(clf, f)
+
+pickle_in = open('linearregression.pickle', 'rb')
+clf = pickle.load(pickle_in)
+
 accuracy = clf.score(X_test, y_test) # score is test 
 forecast_set = clf.predict(X_lately)
 print(forecast_set)
@@ -54,11 +61,13 @@ last_unix = last_date.timestamp()
 one_day = 86400 # number of seconds in a day
 next_unix = last_unix + one_day
 
+# reformatting for plotting
 for i in forecast_set:
 	next_date = datetime.datetime.fromtimestamp(next_unix)
 	next_unix += one_day
 	df.loc[next_date] = [np.nan for _ in range(len(df.columns) - 1)] + [i]
 
+# plot
 df['Adj. Close'].plot()
 df['Forecast'].plot()
 plt.legend(loc=4)
