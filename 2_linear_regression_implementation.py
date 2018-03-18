@@ -50,7 +50,7 @@ def coefficient_of_determination(ys_orig, ys_line):
 	return 1 - (squared_error_regr / squared_error_y_mean)
 
 xs,ys = create_dataset(40, 40, 2, correlation='pos') # random dataset
-xs, ys = create_dataset(40, 10, 2, correlation='pos') # decrease variance will increase r_squared
+xs,ys = create_dataset(40, 10, 2, correlation='pos') # decrease variance will increase r_squared
 
 m,b = best_fit_slope_and_intercept(xs, ys)
 
