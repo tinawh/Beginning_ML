@@ -29,8 +29,7 @@ def k_nearest_neighbors(data, predict, k=3):
 	# number that was most common key / total looked at
 	confidence =  Counter(votes).most_common(1)[0][1] / k
 
-	print(vote_result, confidence)
-	
+	# print(vote_result, confidence)
 	return vote_result, confidence
 
 # fake data 
@@ -44,36 +43,43 @@ def k_nearest_neighbors(data, predict, k=3):
 # plt.scatter(new_features[0], new_features[1], s=100, color=results)
 # plt.show()
 
-# import breast cancer data
-df = pd.read_csv('breast-cancer-wisconsin.data.txt')
-df.replace('?', -99999, inplace=True)
-df.drop(['id'], 1, inplace=True)
+accuracies = []
+for i in range(25): # run multiple times to average
+	# import breast cancer data
+	df = pd.read_csv('breast-cancer-wisconsin.data.txt')
+	df.replace('?', -99999, inplace=True)
+	df.drop(['id'], 1, inplace=True)
 
-# convert everything to float to nested list
-full_data = df.astype(float).values.tolist() 
-random.shuffle(full_data) # shuffle order
+	# convert everything to float to nested list
+	full_data = df.astype(float).values.tolist() 
+	random.shuffle(full_data) # shuffle order
 
-test_size = 0.2
-train_set = {2:[], 4:[]}
-test_set = {2:[], 4:[]}
-train_data = full_data[:-int(test_size*len(full_data))]
-test_data = full_data[-int(test_size*len(full_data)):]
+	test_size = 0.2
+	train_set = {2:[], 4:[]}
+	test_set = {2:[], 4:[]}
+	train_data = full_data[:-int(test_size*len(full_data))]
+	test_data = full_data[-int(test_size*len(full_data)):]
 
-# populate dictionaries
-for i in train_data:
-	train_set[i[-1]].append(i[:-1])
+	# populate dictionaries
+	for i in train_data:
+		train_set[i[-1]].append(i[:-1])
 
-for i in test_data:
-	test_set[i[-1]].append(i[:-1])
+	for i in test_data:
+		test_set[i[-1]].append(i[:-1])
 
-correct = 0 
-total = 0 
+	correct = 0 
+	total = 0 
 
-for group in test_set: 
-	for data in test_set[group]:
-		vote, confidence = k_nearest_neighbors(train_set, data, k=5)
-		if group == vote:
-			correct += 1
-		total += 1 
+	for group in test_set: 
+		for data in test_set[group]:
+			vote, confidence = k_nearest_neighbors(train_set, data, k=5)
+			if group == vote:
+				correct += 1
+			# else: 
+			# 	print(confidence)
+			total += 1 
 
-print('Accuracy:', correct/total)
+	# print('Accuracy:', correct/total)
+	accuracies.append(correct/total)
+
+print(sum(accuracies)/len(accuracies))
