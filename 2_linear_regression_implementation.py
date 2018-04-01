@@ -1,5 +1,8 @@
 # code linear regression
 
+# can still use linear regressions to do classification not just to forecast out
+# by drawing multiple lines and doing squared error 
+
 from statistics import mean 
 import pandas as pd
 import numpy as np 

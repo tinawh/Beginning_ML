@@ -3,6 +3,8 @@
 # k-nearest neighbours handles outliers really badly
 # always want an odd number as k to not get a tie 
 # confidence (variance in voting part) and accuracy (right/wrong) can be very different 
+# works on linear and non linear data 
+# can have radius and threading so quite fast and accurate 
 
 import numpy as np
 from sklearn import preprocessing, neighbors, model_selection
